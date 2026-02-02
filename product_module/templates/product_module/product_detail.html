@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block title %}
+    {{ product.name }}
+{% endblock %}
+
+{% block header_references %}
+    <link rel="stylesheet" href="/static/lib/image-lightbox/css/lightbox.min.css">
+{% endblock %}
+
+{% block footer_references %}
+    <script src="/static/lib/image-lightbox/js/lightbox.min.js"></script>
+    <script src="/static/lib/image-lightbox/js/lightbox-plus-jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="single-box">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h5></h5>
+                            <h6>{{ product.name }}</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="single-content-right">
+                                        <ul class="brand-ul">
+                                            <li>برند : <a href="#">{{ product.brand.name }}</a></li>
+                                            <li>دسته بندی : <a
+                                                    href="{% url 'product_list_page' cat=product.category.slug %}">{{ product.category.name }}</a>
+                                            </li>
+                                        </ul>
+                                        <br>
+                                        <span>توضیحات محصول :</span><br>
+                                        <p>{{ product.description }}</p>
+                                        {#                                        <ul class="product-ul">#}
+                                        {#                                            <li></li>#}
+                                        {#                                            <li>{{ product.short_description }}</li>#}
+                                        {#                                        </ul>#}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="single-content-left">
+                                        <ul>
+                                            <span>وضعیت : موجود در انبار</span>
+                                            <br>
+                                            <br>
+                                            {#                                            <li>رنگ بندی : </li>#}
+                                            <br>
+                                            <li>
+                                                رنگ بندی :
+                                                <ul>
+                                                    <li><i class="fa fa-square white"></i>سفید</li>
+                                                    <li><i class="fa fa-square black"></i>مشکی</li>
+                                                    <li><i class="fa fa-square silver"></i>نقره ای</li>
+                                                    <li><i class="fa fa-square gold"></i>طلایی</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            {% if product.discount_price %}
+                                <del>{{ product.price|three_digits_currency }} تومان</del>
+                                <h3>{{ product.discount_price|three_digits_currency }}</h3>
+                            {% else %}
+                                <h3>{{ product.price|three_digits_currency }} تومان</h3>
+                            {% endif %}
+
+                            <div class="btn-single">
+                                <a href="#"><i class="fa fa-cart-plus"></i>خرید آنلاین</a>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="single-img">
+                                <figure>
+                                    <img src="{{ product.image.url }}" class="w-100 s-img"
+                                         data-zoom-image="{{ product.image.url }}" alt="" id="main_image">
+                                </figure>
+                                <h3>
+                                    <a id="show-large-image" href="{{ product.image.url }}"
+                                       data-lightbox="product-image">
+                                        بزرگنمایی
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="single-img-slider">
+                                <div class="owl-carousel owl-theme ov-single owl-rtl owl-loaded owl-drag">
+
+
+                                    <div class="owl-stage-outer">
+                                        <div class="owl-stage"
+                                             style="transform: translate3d(0px, 0px, 0px); transition: all; width: 452px;">
+                                            <div class="owl-item active" style="width: 80.25px; margin-left: 10px;">
+                                                <div class="item">
+                                                    <a onclick="showLargeImage('{{ product.image.url }}')"
+                                                       data-fancybox="gallery">
+                                                        <img src="{{ product.image.url }}" class="w-100">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {% for gallery in product.productgallery_set.all %}
+                                                <div class="owl-item active" style="width: 80.25px; margin-left: 10px;">
+                                                    <div class="item">
+                                                        <a onclick="showLargeImage('{{ gallery.image.url }}')"
+                                                           data-fancybox="gallery">
+                                                            <img src="{{ gallery.image.url }}" class="w-100">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="owl-nav">
+                                        <button type="button" role="presentation" class="owl-prev disabled"><span
+                                                aria-label="Previous">‹</span></button>
+                                        <button type="button" role="presentation" class="owl-next"><span
+                                                aria-label="Next">›</span></button>
+                                    </div>
+                                    <div class="owl-dots">
+                                        <button role="button" class="owl-dot active"><span></span></button>
+                                        <button role="button" class="owl-dot"><span></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <span class="releated-products">محصولات مرتبط</span>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="single-two-slider">
+                    <div class="owl-carousel owl-theme ov-single-two owl-rtl owl-loaded owl-drag">
+
+
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage"
+                                 style="transform: translate3d(0px, 0px, 0px); transition: all; width: 2275px;">
+                                {% for related_product in related_products %}
+                                    <div class="owl-item active" style="width: 217.5px; margin-left: 10px;">
+                                        <div class="item">
+                                            <figure>
+                                                <a href=""><img src="{{ related_product.image.url }}" class="w-100"></a>
+                                            </figure>
+                                            <h5>{{ related_product.name }}</h5>
+                                            <span>{{ related_product.price|three_digits_currency }} تومان</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+
+                                {#                                <div class="owl-item active" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item active" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item active" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="owl-item" style="width: 217.5px; margin-left: 10px;">#}
+                                {#                                    <div class="item">#}
+                                {#                                        <figure>#}
+                                {#                                            <a href=""><img src="/static/img/Canon_EOS_400D.png" class="w-100"></a>#}
+                                {#                                        </figure>#}
+                                {#                                        <h5>Samsung 500</h5>#}
+                                {#                                        <span>1,200,000 تومان</span>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                            </div>
+                        </div>
+                        <div class="owl-nav">
+                            <button type="button" role="presentation" class="owl-prev disabled"><span
+                                    aria-label="Previous">‹</span></button>
+                            <button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span>
+                            </button>
+                        </div>
+                        <div class="owl-dots">
+                            <button role="button" class="owl-dot active"><span></span></button>
+                            <button role="button" class="owl-dot"><span></span></button>
+                            <button role="button" class="owl-dot"><span></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="single-tabs">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#one"><i class="fa fa-file"></i>مشخصات فنی</a>
+                        </li>
+                        <li><a data-toggle="tab" href="#two"><i class="fa fa-pencil"></i>نظرات کاربران</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="one" class="tab-pane fade">
+                            {% for group in specification_group %}
+                                <h4>{{ group.title }}</h4>
+                                {% for spe in group.productspecification_set.all %}
+                                    <p class="bg-light"><span>{{ spe.title }}:</span>{{ spe.value }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                            {#                            <p class="bg-light"><span>مدل:</span>Tab G6</p>#}
+                            {#                            <p class="bg-light"><span>گارانتی:</span>Huawei</p>#}
+                            {#                            <p class="bg-light"><span>شبکه های تلفن:</span>4G-3G-LTE</p>#}
+                            {#                            <p class="bg-light"><span>تعداد سیمکارت:</span>2</p>#}
+                            {#                            <p class="bg-light"><span>حافظه داخلی:</span>32G</p>#}
+                            {#                            <p class="bg-light"><span>پشتیبانی از کارت sd:</span>بله</p>#}
+                            {#                            <p class="bg-light"><span>باتری:</span>1300 میلی آمپر</p>#}
+                            {#                            <p class="bg-light"><span>باتری اضافی:</span>ندارد</p>#}
+                            {#                            <p class="bg-light"><span>جک هدفون:</span>دارد</p>#}
+                            {#                            <p class="bg-light"><span>گارد:</span>ندارد</p>#}
+                        </div>
+                        <div id="two" class="tab-pane fade">
+
+                            {% for comment in comments %}
+                                <div class="comment-card">
+                                    <div class="comment-header">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                {{ comment.user.email|first|upper }}
+                                            </div>
+                                            <span class="comment-user">
+                                                {{ comment.user.email }}
+                                            </span>
+                                            <span class="comment-date">{{ comment.create_date }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="comment-body">
+                                        {{ comment.text }}
+                                    </div>
+
+                                    <div class="comment-actions">
+                                        <button class="reply-btn" onclick="fillParentId({{ comment.id }})">پاسخ</button>
+                                    </div>
+                                    <div class="reply-form">
+                                        {#                                        <form method="post">#}
+                                        {#                                            {% csrf_token %}#}
+                                        <textarea name="reply_text" placeholder="پاسخ خود را بنویسید..."></textarea>
+                                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                        <button type="submit">ارسال پاسخ</button>
+                                        {#                                        </form>#}
+                                    </div>
+
+                                    <!-- نمایش ریپلای‌ها -->
+                                    {% for reply in comment.productcomment_set.all %}
+                                        <div class="reply-card">
+                                            <div class="comment-header">
+                                                <span class="comment-user">{{ reply.user.email }}</span>
+                                                <span class="comment-date">{{ reply.create_date }}</span>
+                                            </div>
+                                            <div class="comment-body">
+                                                {{ reply.text }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="comment-divider"></div>
+
+                            {% if user.is_authenticated %}
+                                <div class="comment-create-card" id="comment_form">
+                                {% csrf_token %}
+                                    <input type="hidden" id="parent_id" value="">
+                                    <div class="comment-create-header">
+                                        ثبت نظر
+                                    </div>
+                                    {{ comment_form.comment }}
+                                    <button type="button" onclick="addComment({{ product.id }})">ارسال نظر</button>
+                                </div>
+                            {% else %}
+                                <div class="comment-login-hint">
+                                    <a href="{% url 'login_page' %}">برای ثبت نظر ابتدا وارد شوید</a>.
+                                </div>
+                            {% endif %}
+
+                            {#                            نظری وجود ندارد...#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

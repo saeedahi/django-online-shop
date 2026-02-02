@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            {% render_partial 'user_module.views.user_panel_menu' %}
+        </div>
+    </div>
+{% endblock %}

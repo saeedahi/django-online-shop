@@ -1,0 +1,23 @@
+{% load render_partial %}
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'header_references.html' %}
+    {% block header_references %}{% endblock %}
+</head>
+<body>
+    {% render_partial 'home_module.views.header_components' %}
+    <br>
+    <!---------------------------------->
+    {% block content %}{% endblock %}
+    <!---------------------------------->
+    {% render_partial 'home_module.views.footer_components' %}
+    <!---------------------------------->
+    {% include 'footer_references.html' %}
+    <!---------------------------------->
+    {% block footer_references %}{% endblock %}
+</body>
+</html>

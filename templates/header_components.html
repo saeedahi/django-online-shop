@@ -1,0 +1,91 @@
+<div class="social">
+    <ul>
+        <li><a href=""><i class="fa fa-instagram"></i></a></li>
+        <li><a href=""><i class="fa fa-send"></i></a></li>
+        <li><a href=""><i class="fa fa-facebook"></i></a></li>
+        <li><a href=""><i class="fa fa-twitter"></i></a></li>
+    </ul>
+</div>
+<!---------------------------------->
+<div class="top2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="login">
+                    {% if not request.user.is_authenticated %}
+                        <a href="{% url 'register_page' %}" class="mybtn"><i class="fa fa-user-plus"></i>ثبت نام</a>
+                        <a href="{% url 'login_page' %}" class="mybtn"><i class="fa fa-user-o"></i>ورود</a>
+                    {% else %}
+                        <a href="{% url 'user_panel_dashboard_page' %}" class="mybtn"><i class="fa fa-user-o"></i>پنل کاربری</a>
+                        <a href="{% url 'logout' %}" class="mybtn"><i class="fa fa-user-o"></i>خروج</a>
+                    {% endif %}
+
+                    <a href="#" class="mybtn"><i class="fa fa-cart-arrow-down"></i>سبد</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <form method="get" action='{% url 'searching_page' %}'>
+                    <input type="text" name="q" id="searchbar" placeholder="کالای مورد نظر را جستجو کنید" value="">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{#</div><!--top2-->#}
+<!---------------------------------->
+<div class="main-menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul>
+                    {% for category in categories %}
+                    	{% if category.parent is None %}
+                            <li><a href="#">{{ category.name }}</a>
+                                <ul>
+                                    {% for categor in category.productcategory_set.all %}
+                                    	<li><a href="{% url 'product_list_page' cat=categor.slug %}">{{ categor.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+
+{#                    <li><a href="#">کالای دیجیتال</a>#}
+{#                        <ul>#}
+{#                            <li><a href="{% url 'product_list_page' cat='mobile' %}">گوشی موبایل</a></li>#}
+{#                            <li><a href="#">تبلت</a></li>#}
+{#                            <li><a href="#">لپ تاپ</a></li>#}
+{#                            <li><a href="#">نمایشگر</a></li>#}
+{#                            <li><a href="#">دوربین عکاسی</a></li>#}
+{#                            <li><a href="#">لوازم جانبی رایانه</a></li>#}
+{#                            <li><a href="#">لوازم جانبی موبایل</a></li>#}
+{#                            <li><a href="#">سایر</a></li>#}
+{#                        </ul>#}
+{#                    </li>#}
+{#                    <li><a href="#">آرایشی و بهداشتی</a></li>#}
+{#                    <li>#}
+{#                        <a href="#">مد و پوشاک</a>#}
+{#                        <ul>#}
+{#                            <li><a href="#">لباس فصل</a></li>#}
+{#                            <li><a href="#">ساعت مچی</a></li>#}
+{#                            <li><a href="#">بدلیجات</a></li>#}
+{#                        </ul>#}
+{#                    </li>#}
+{#                    <li><a href="#">خانه و آشپزخانه</a></li>#}
+{#                    <li><a href="#">ابزار اداری</a></li>#}
+{#                    <li><a href="#">اسباب بازی</a></li>#}
+                    <li>
+                        <a href="#">اخبار</a>
+                        <ul>
+                            <li><a href="#">تکنولوژی</a></li>
+                            <li><a href="#">علم و دانش</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">درباره ما</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

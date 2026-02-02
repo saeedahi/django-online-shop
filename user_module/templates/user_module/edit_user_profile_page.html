@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load render_partial %}
+
+{% block title %}
+    ویرایش اطلاعات
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-md-4">
+            {% render_partial 'user_module.views.user_panel_menu' %}
+        </div>
+        <div class="col-md-6">
+            <form enctype="multipart/form-data" action="{% url 'edit_user_profile_page' %}" method="post">
+                {% csrf_token %}
+                {{ edit_form.as_p }}
+                <button type="submit" class="btn btn-success">ثبت</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block title %}
+    محصولات
+{% endblock %}
+
+{% block content %}
+    <div class="pages-bnaer text-center">
+        <div class="container">
+            <span>جستجو برای {{ search_text }}</span>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for product in products%}
+                <div class="col-md-4">
+                    <div class="blog-content">
+                        <figure>
+                            <img src="{{ product.image.url }}" class="w-50" alt="{{ product.slug }}">
+                        </figure>
+                        <h5><i class="fa fa-title"></i>{{ product.name }}</h5>
+                        <p>
+                            {{ product.short_description }}
+                        </p>
+                        <ul>
+                            <li><i class="fa fa-bars"></i>دسته بندی : {{ product.category }}</li>
+                            <li><i class="fa fa-dollar"></i>قیمت : {{ product.price|three_digits_currency }} تومان</li>
+                        </ul>
+                        <a href="{% url 'product_detail_page' cat=product.category.slug slug=product.slug %}" class="mybtn"><i class="fa fa-continuous"></i>ادامه مطلب»</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

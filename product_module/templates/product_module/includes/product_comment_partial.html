@@ -1,0 +1,60 @@
+{% for comment in comments %}
+    <div class="comment-card">
+        <div class="comment-header">
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ comment.user.email|first|upper }}
+                </div>
+                <span class="comment-user">{{ comment.user.email }}</span>
+                <span class="comment-date">{{ comment.create_date }}</span>
+            </div>
+        </div>
+
+        <div class="comment-body">
+            {{ comment.text }}
+        </div>
+
+        <div class="comment-actions">
+            <button class="reply-btn" onclick="fillParentId({{ comment.id }})">پاسخ</button>
+        </div>
+        {#        <div class="reply-form">#}
+        {#                                        <form method="post">#}
+        {#                                            {% csrf_token %}#}
+        {#            <textarea name="reply_text" placeholder="پاسخ خود را بنویسید..."></textarea>#}
+        {#            <input type="hidden" name="parent_id" value="{{ comment.id }}">#}
+        {#            <button type="submit">ارسال پاسخ</button>#}
+        {#                                        </form>#}
+        {#        </div>#}
+
+        <!-- نمایش ریپلای‌ها -->
+        {% for reply in comment.productcomment_set.all %}
+            <div class="reply-card">
+                <div class="comment-header">
+                    <span class="comment-user">{{ reply.user.email }}</span>
+                    <span class="comment-date">{{ reply.create_date }}</span>
+                </div>
+                <div class="comment-body">
+                    {{ reply.text }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<div class="comment-divider"></div>
+
+{% if user.is_authenticated %}
+    <div class="comment-create-card" id="comment_form">
+        {% csrf_token %}
+        <input type="hidden" id="parent_id" value="">
+        <div class="comment-create-header">
+            ثبت نظر
+        </div>
+        {{ comment_form.comment }}
+        <button type="button" onclick="addComment({{ product.id }})">ارسال نظر</button>
+    </div>
+{% else %}
+    <div class="comment-login-hint">
+        <a href="{% url 'login_page' %}">برای ثبت نظر ابتدا وارد شوید</a>.
+    </div>
+{% endif %}
