@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from product_module.models import ProductCategory, Product
+from django.db.models import Q
 
 
 # Create your views here.
@@ -61,7 +62,12 @@ def searching(request: HttpRequest):
     search_text = request.GET.get('q', '')
     print(search_text)
     if search_text:
-        products = Product.objects.filter(name__contains=search_text, is_active=True, is_deleted=False) or Product.objects.filter(slug__contains=search_text, is_active=True, is_deleted=False)
+        products = Product.objects.filter(
+                    Q(name__icontains=search_text) |
+                    Q(slug__icontains=search_text),
+                    is_active=True,
+                    is_deleted=False
+                )
         context = {
             'products': products,
             'search_text': search_text
