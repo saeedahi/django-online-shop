@@ -41,7 +41,7 @@ class HomeView(TemplateView):
         #         product.start_discount = None
         #         product.discount_price = None
         #         product.save()
-        if discounted_product:
+        if discounted_product.exists():
             delta = discounted_product[0].end_discount - discounted_product[0].start_discount
             time_to_left = int(delta.total_seconds() / 60)
             context['discounted_product'] = discounted_product[0]
